@@ -1,0 +1,21 @@
+# Render Blueprint — deploy this backend as a web service
+# See: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: researchgraph-ai-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: OPENAI_API_KEY
+        sync: false  # set manually in Render dashboard
+      - key: CORS_ORIGINS
+        value: https://your-frontend-domain.vercel.app
+      - key: PYTHON_VERSION
+        value: 3.11.6
